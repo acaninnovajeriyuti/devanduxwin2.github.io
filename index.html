@@ -6,6 +6,7 @@
     <title>Secret Tech Challenge</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22red%22>☠</text></svg>">
     <style>
+        /* Global Styles */
         body {
             font-family: 'Courier New', monospace;
             background-color: #121212;
@@ -15,6 +16,13 @@
             padding: 20px;
             line-height: 1.6;
         }
+
+        h1 {
+            color: #ff5555;
+            text-align: center;
+            text-shadow: 0 0 5px rgba(255, 85, 85, 0.5);
+        }
+
         .game-container {
             background-color: #1e1e1e;
             border: 1px solid #333;
@@ -22,15 +30,8 @@
             padding: 20px;
             margin-top: 20px;
         }
-        h1 {
-            color: #ff5555;
-            text-align: center;
-            text-shadow: 0 0 5px rgba(255, 85, 85, 0.5);
-        }
-        .options {
-            margin: 20px 0;
-            text-align: center;
-        }
+
+        /* Buttons and Inputs */
         button {
             background-color: #333;
             color: white;
@@ -43,10 +44,12 @@
             min-width: 200px;
             display: inline-block;
         }
+
         button:hover {
             background-color: #555;
             transform: translateY(-2px);
         }
+
         input[type="text"] {
             background-color: #333;
             color: white;
@@ -56,6 +59,8 @@
             margin-right: 5px;
             width: 200px;
         }
+
+        /* Result and Question Styles */
         .result {
             margin-top: 20px;
             padding: 15px;
@@ -63,41 +68,52 @@
             min-height: 50px;
             text-align: center;
         }
+
         .correct {
             background-color: rgba(45, 90, 45, 0.3);
             border: 1px solid #2d5a2d;
             color: #aaffaa;
         }
+
         .incorrect {
             background-color: rgba(90, 45, 45, 0.3);
             border: 1px solid #5a2d2d;
             color: #ffaaaa;
         }
+
         .question {
             font-weight: bold;
             margin: 15px 0;
             font-size: 1.1em;
             text-align: center;
         }
+
         .hidden {
             display: none;
         }
+
+        /* Animation */
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
+
         .fade-in {
             animation: fadeIn 0.5s ease-in;
         }
+
+        /* Responsive Design */
         @media (max-width: 600px) {
             body {
                 padding: 10px;
             }
+
             button {
                 display: block;
                 width: 100%;
                 margin: 5px 0;
             }
+
             input[type="text"] {
                 width: 100%;
                 margin: 10px 0;
@@ -108,11 +124,14 @@
 <body>
     <div class="game-container">
         <h1>☠ Secret Tech Challenge ☠</h1>
+        
+        <!-- Initial Welcome Message -->
         <div id="output">
             <p class="fade-in">Welcome, Oh... Who are you to pass through these lands?</p>
             <p class="fade-in">No matter... Choose your path carefully if you don't want to become food for me...</p>
         </div>
 
+        <!-- Main Menu -->
         <div id="mainMenu" class="options">
             <p>Choose your focus:</p>
             <button onclick="selectOption(1)">1. Pre-Hispanic Societies to Car</button>
@@ -121,7 +140,10 @@
             <button onclick="selectOption(4)">4. Exit</button>
         </div>
 
+        <!-- Submenu for Path Selection -->
         <div id="subMenu" class="options hidden"></div>
+
+        <!-- Question and Result Containers -->
         <div id="questionContainer" class="hidden"></div>
         <div id="result" class="result"></div>
     </div>
@@ -144,31 +166,36 @@
                 return;
             }
 
-            document.getElementById('subMenu').innerHTML = '';
-            document.getElementById('questionContainer').innerHTML = '';
-            document.getElementById('result').innerHTML = '';
-            document.getElementById('result').className = 'result';
+            resetGame();
+            let subMenuHTML = '';
 
-            let subMenuHTML = '<p>';
-            if (option === 1) {
-                document.getElementById('output').innerHTML = '<p class="fade-in">Well, you chose the ancient path, now is time to test you...</p>';
-                subMenuHTML += 'Which quest do you want to solve?</p>';
-                subMenuHTML += '<button onclick="selectSubOption(1)">1. Pre-Hispanic</button>';
-                subMenuHTML += '<button onclick="selectSubOption(2)">2. Car</button>';
-            } 
-            else if (option === 2) {
-                document.getElementById('output').innerHTML = '<p class="fade-in">You have chosen the Digital rise path...</p>';
-                subMenuHTML += 'What do you want! (I don\'t think you can survive...):</p>';
-                subMenuHTML += '<button onclick="selectSubOption(1)">1. Internet</button>';
-                subMenuHTML += '<button onclick="selectSubOption(2)">2. First Phone</button>';
-                subMenuHTML += '<button onclick="selectSubOption(3)">3. Apple Phone</button>';
-            } 
-            else if (option === 3) {
-                document.getElementById('output').innerHTML = '<p class="fade-in">You have entered the latest path: *Modern path* timeline...</p>';
-                subMenuHTML += 'Pick a node of evolution:</p>';
-                subMenuHTML += '<button onclick="selectSubOption(1)">1. Android 🤖</button>';
-                subMenuHTML += '<button onclick="selectSubOption(2)">2. 4G 🔄</button>';
-                subMenuHTML += '<button onclick="selectSubOption(3)">3. AI 🧠</button>';
+            switch (option) {
+                case 1:
+                    document.getElementById('output').innerHTML = '<p class="fade-in">Well, you chose the ancient path, now is time to test you...</p>';
+                    subMenuHTML = `
+                        <p>Which quest do you want to solve?</p>
+                        <button onclick="selectSubOption(1)">1. Pre-Hispanic</button>
+                        <button onclick="selectSubOption(2)">2. Car</button>
+                    `;
+                    break;
+                case 2:
+                    document.getElementById('output').innerHTML = '<p class="fade-in">You have chosen the Digital rise path...</p>';
+                    subMenuHTML = `
+                        <p>What do you want! (I don\'t think you can survive...):</p>
+                        <button onclick="selectSubOption(1)">1. Internet</button>
+                        <button onclick="selectSubOption(2)">2. First Phone</button>
+                        <button onclick="selectSubOption(3)">3. Apple Phone</button>
+                    `;
+                    break;
+                case 3:
+                    document.getElementById('output').innerHTML = '<p class="fade-in">You have entered the latest path: *Modern path* timeline...</p>';
+                    subMenuHTML = `
+                        <p>Pick a node of evolution:</p>
+                        <button onclick="selectSubOption(1)">1. Android 🤖</button>
+                        <button onclick="selectSubOption(2)">2. 4G 🔄</button>
+                        <button onclick="selectSubOption(3)">3. AI 🧠</button>
+                    `;
+                    break;
             }
 
             document.getElementById('subMenu').innerHTML = subMenuHTML;
@@ -178,57 +205,26 @@
 
         function selectSubOption(subOption) {
             gameState.currentSubPath = subOption;
-            document.getElementById('questionContainer').innerHTML = '';
-            document.getElementById('result').innerHTML = '';
-            document.getElementById('result').className = 'result';
+            resetGame();
 
             let questionHTML = '<div class="question fade-in">';
-            
+
             if (gameState.currentPath === 1) {
-                if (subOption === 1) {
-                    questionHTML += 'What materials did they use to create their tools?</div>';
-                    questionHTML += '<button onclick="checkAnswer(\'a\')">a. Stone, Bone and Wood</button>';
-                    questionHTML += '<button onclick="checkAnswer(\'b\')">b. Iron, Copper and Diamond</button>';
-                } 
-                else if (subOption === 2) {
-                    questionHTML += 'Who developed the first commercial car? (Hint: Did you hear of a >Ford< car?)</div>';
-                    questionHTML += '<input type="text" id="textAnswer" placeholder="Your answer">';
-                    questionHTML += '<button onclick="checkTextAnswer()">Submit</button>';
-                }
-            } 
-            else if (gameState.currentPath === 2) {
-                if (subOption === 1) {
-                    questionHTML += 'What protocol gave birth to the internet?</div>';
-                    questionHTML += '<button onclick="checkAnswer(\'a\')">a. TCP/IP</button>';
-                    questionHTML += '<button onclick="checkAnswer(\'b\')">b. P2P</button>';
-                } 
-                else if (subOption === 2) {
-                    questionHTML += '📡 What company created the first commercial phone?</div>';
-                    questionHTML += '<input type="text" id="textAnswer" placeholder="Your answer">';
-                    questionHTML += '<button onclick="checkTextAnswer()">Submit</button>';
-                } 
-                else if (subOption === 3) {
-                    questionHTML += '📱 What was the iPhone\'s game-changing feature?</div>';
-                    questionHTML += '<button onclick="checkAnswer(\'a\')">a. Take photos</button>';
-                    questionHTML += '<button onclick="checkAnswer(\'b\')">b. Touch screen</button>';
-                }
-            } 
-            else if (gameState.currentPath === 3) {
-                if (subOption === 1) {
-                    questionHTML += '🤖 What was the first Android phone?</div>';
-                    questionHTML += '<button onclick="checkAnswer(\'a\')">a. HTC Dream</button>';
-                    questionHTML += '<button onclick="checkAnswer(\'b\')">b. Google Nexus</button>';
-                } 
-                else if (subOption === 2) {
-                    questionHTML += 'What was before 4G?</div>';
-                    questionHTML += '<button onclick="checkAnswer(\'a\')">a. 3G</button>';
-                    questionHTML += '<button onclick="checkAnswer(\'b\')">b. 2G</button>';
-                } 
-                else if (subOption === 3) {
-                    questionHTML += '🧠 What is the most famous AI today?</div>';
-                    questionHTML += '<button onclick="checkAnswer(\'a\')">a. ChatGPT</button>';
-                    questionHTML += '<button onclick="checkAnswer(\'b\')">b. Gemini</button>';
-                }
+                questionHTML += (subOption === 1)
+                    ? 'What materials did they use to create their tools?</div>'
+                    : 'Who developed the first commercial car? (Hint: Did you hear of a >Ford< car?)</div>';
+            } else if (gameState.currentPath === 2) {
+                questionHTML += (subOption === 1)
+                    ? 'What protocol gave birth to the internet?</div>'
+                    : (subOption === 2)
+                    ? '📡 What company created the first commercial phone?</div>'
+                    : '📱 What was the iPhone\'s game-changing feature?</div>';
+            } else if (gameState.currentPath === 3) {
+                questionHTML += (subOption === 1)
+                    ? '🤖 What was the first Android phone?</div>'
+                    : (subOption === 2)
+                    ? 'What was before 4G?</div>'
+                    : '🧠 What is the most famous AI today?</div>';
             }
 
             document.getElementById('questionContainer').innerHTML = questionHTML;
@@ -239,35 +235,35 @@
         function checkAnswer(answer) {
             let correct = false;
             let message = '';
-            
+
             if (gameState.currentPath === 1) {
-                if (gameState.currentSubPath === 1) {
-                    correct = (answer === 'a');
+                if (gameState.currentSubPath ===
                     message = correct ? '✅ You are wise...' : '❌ The ancient souls say that isn\'t the correct path.';
+                } else if (gameState.currentSubPath === 2) {
+                    correct = (answer === 'a');
+                    message = correct ? '✅ Correct, well done!' : '❌ That\'s not the right answer, the first car was Ford!';
                 }
-            } 
-            else if (gameState.currentPath === 2) {
+            } else if (gameState.currentPath === 2) {
                 if (gameState.currentSubPath === 1) {
                     correct = (answer === 'a');
-                    message = correct ? '✅ You have unlocked the code of communication.' : '❌ Incorrect... The net isn\'t governed by P2P.';
-                } 
-                else if (gameState.currentSubPath === 3) {
+                    message = correct ? '✅ You unlocked the protocol of the internet.' : '❌ Incorrect... It\'s not governed by P2P.';
+                } else if (gameState.currentSubPath === 2) {
+                    correct = (answer === 'motorola');
+                    message = correct ? '✅ Correct... Motorola was the first commercial phone.' : '❌ Nope, try again.';
+                } else if (gameState.currentSubPath === 3) {
                     correct = (answer === 'b');
-                    message = correct ? '✅ Correct!' : '❌ Try again...';
+                    message = correct ? '✅ Correct! The touch screen was revolutionary.' : '❌ Try again...';
                 }
-            } 
-            else if (gameState.currentPath === 3) {
+            } else if (gameState.currentPath === 3) {
                 if (gameState.currentSubPath === 1) {
                     correct = (answer === 'a');
-                    message = correct ? '✅ Well done!' : '❌ Incorrect.';
-                } 
-                else if (gameState.currentSubPath === 2) {
+                    message = correct ? '✅ Correct! The HTC Dream was the first Android phone.' : '❌ Incorrect. Try again.';
+                } else if (gameState.currentSubPath === 2) {
                     correct = (answer === 'a');
-                    message = correct ? '✅ Correct!' : '❌ Not fast enough...';
-                } 
-                else if (gameState.currentSubPath === 3) {
+                    message = correct ? '✅ Correct! 3G was the predecessor to 4G.' : '❌ Wrong... 2G came before 3G.';
+                } else if (gameState.currentSubPath === 3) {
                     correct = (answer === 'a');
-                    message = correct ? '✅ You\'ve met the mind that guides this test...' : '❌ Perhaps in another timeline...';
+                    message = correct ? '✅ You know the most famous AI today!' : '❌ Wrong! Maybe in another timeline...';
                 }
             }
 
@@ -278,14 +274,13 @@
             const answer = document.getElementById('textAnswer').value.toLowerCase();
             let correct = false;
             let message = '';
-            
+
             if (gameState.currentPath === 1 && gameState.currentSubPath === 2) {
                 correct = (answer === 'henry ford');
-                message = correct ? '✅ Well, you chose correctly.' : `❌ ${answer} is not the name whispered by him.`;
-            } 
-            else if (gameState.currentPath === 2 && gameState.currentSubPath === 2) {
+                message = correct ? '✅ Correct! Henry Ford was the founder of Ford.' : `❌ Sorry, ${answer} is not the name whispered by him.`;
+            } else if (gameState.currentPath === 2 && gameState.currentSubPath === 2) {
                 correct = (answer === 'motorola');
-                message = correct ? '✅ Correct...' : `❌ ${answer}? That's not the one inscribed in the scrolls.`;
+                message = correct ? '✅ Correct, Motorola created the first commercial phone.' : `❌ ${answer}? That's not the name on the scrolls.`;
             }
 
             showResult(message, correct);
@@ -311,15 +306,23 @@
         }
 
         function endGame() {
-            document.getElementById('output').innerHTML = '<p class="fade-in">Well, traveler... Until we meet again, you survived this time but another can not be survived...</p>';
+            document.getElementById('output').innerHTML = '<p class="fade-in">Well, traveler... Until we meet again, you survived this time but the next may not be the same...</p>';
             document.getElementById('mainMenu').classList.add('hidden');
             document.getElementById('subMenu').classList.add('hidden');
             document.getElementById('questionContainer').classList.add('hidden');
             document.getElementById('result').innerHTML = 
                 '<p class="fade-in">The secret code of one box is: a336903*2gcx!¿?</p>' +
-                '<p class="fade-in">May you has not finished...</p>';
+                '<p class="fade-in">May you have not finished...</p>';
+            document.getElementById('result').className = 'result';
+        }
+
+        function resetGame() {
+            document.getElementById('subMenu').innerHTML = '';
+            document.getElementById('questionContainer').innerHTML = '';
+            document.getElementById('result').innerHTML = '';
             document.getElementById('result').className = 'result';
         }
     </script>
 </body>
 </html>
+
