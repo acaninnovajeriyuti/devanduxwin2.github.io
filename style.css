@@ -23,24 +23,41 @@ h1 {
   font-size: 1em;
 }
 
-/* Text input area */
-.input-area {
-  display: flex;
+/* Button groups */
+.main-buttons,
+.choice-buttons {
+  display: none;
   flex-direction: column;
   gap: 10px;
   margin-top: 15px;
 }
 
-/* A/B button choice area */
-.choice-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
+.main-buttons button,
+.choice-buttons button {
+  padding: 12px;
+  font-size: 1em;
+  background-color: #000;
+  color: #0f0;
+  border: 1px solid #0f0;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.main-buttons button:hover,
+.choice-buttons button:hover {
+  background-color: #0f0;
+  color: #000;
+}
+
+.input-area {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
   margin-top: 15px;
 }
 
-/* Input & buttons */
-input[type="text"], button {
+.input-area input,
+.input-area button {
   padding: 12px;
   font-size: 1em;
   background-color: #000;
@@ -50,24 +67,29 @@ input[type="text"], button {
   text-align: center;
 }
 
-button:hover {
+.input-area button:hover {
   background-color: #0f0;
   color: #000;
 }
 
-/* Responsive tweaks */
 @media (min-width: 600px) {
   .input-area {
     flex-direction: row;
-    justify-content: center;
     align-items: center;
   }
 
-  input[type="text"] {
+  .input-area input {
     flex: 1;
   }
 
-  button {
-    width: 100px;
+  .main-buttons,
+  .choice-buttons {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .main-buttons button,
+  .choice-buttons button {
+    min-width: 100px;
   }
 }
