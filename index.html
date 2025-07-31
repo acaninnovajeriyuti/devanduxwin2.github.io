@@ -1,327 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secret Tech Challenge</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22red%22>☠</text></svg>">
-    <style>
-        /* Global Styles */
-        body {
-            font-family: 'Courier New', monospace;
-            background-color: #121212;
-            color: #e0e0e0;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            line-height: 1.6;
-        }
-
-        h1 {
-            color: #ff5555;
-            text-align: center;
-            text-shadow: 0 0 5px rgba(255, 85, 85, 0.5);
-        }
-
-        .game-container {
-            background-color: #1e1e1e;
-            border: 1px solid #333;
-            border-radius: 5px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        /* Buttons and Inputs */
-        button {
-            background-color: #333;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            margin: 5px;
-            border-radius: 3px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            min-width: 200px;
-            display: inline-block;
-        }
-
-        button:hover {
-            background-color: #555;
-            transform: translateY(-2px);
-        }
-
-        input[type="text"] {
-            background-color: #333;
-            color: white;
-            border: 1px solid #555;
-            padding: 8px 12px;
-            border-radius: 3px;
-            margin-right: 5px;
-            width: 200px;
-        }
-
-        /* Result and Question Styles */
-        .result {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 3px;
-            min-height: 50px;
-            text-align: center;
-        }
-
-        .correct {
-            background-color: rgba(45, 90, 45, 0.3);
-            border: 1px solid #2d5a2d;
-            color: #aaffaa;
-        }
-
-        .incorrect {
-            background-color: rgba(90, 45, 45, 0.3);
-            border: 1px solid #5a2d2d;
-            color: #ffaaaa;
-        }
-
-        .question {
-            font-weight: bold;
-            margin: 15px 0;
-            font-size: 1.1em;
-            text-align: center;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        /* Animation */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
-
-            button {
-                display: block;
-                width: 100%;
-                margin: 5px 0;
-            }
-
-            input[type="text"] {
-                width: 100%;
-                margin: 10px 0;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Secret Tech Challenge</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><text y='50%' x='50%' dominant-baseline='middle' text-anchor='middle' font-size='20'>💀</text></svg>">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="game-container">
-        <h1>☠ Secret Tech Challenge ☠</h1>
-        
-        <!-- Initial Welcome Message -->
-        <div id="output">
-            <p class="fade-in">Welcome, Oh... Who are you to pass through these lands?</p>
-            <p class="fade-in">No matter... Choose your path carefully if you don't want to become food for me...</p>
-        </div>
+  <h1>☠ Secret Tech Challenge ☠</h1>
 
-        <!-- Main Menu -->
-        <div id="mainMenu" class="options">
-            <p>Choose your focus:</p>
-            <button onclick="selectOption(1)">1. Pre-Hispanic Societies to Car</button>
-            <button onclick="selectOption(2)">2. Internet to iPhone</button>
-            <button onclick="selectOption(3)">3. Android to AI</button>
-            <button onclick="selectOption(4)">4. Exit</button>
-        </div>
+  <div id="output">
+    Welcome, Oh... Who are you to pass through these lands?\nNo matter... Choose your path carefully if you don't want to become food for me...
+  </div>
 
-        <!-- Submenu for Path Selection -->
-        <div id="subMenu" class="options hidden"></div>
+  <div class="input-area">
+    <input type="text" id="input" placeholder="Type your choice..." />
+    <button onclick="handleInput()">Submit</button>
+  </div>
 
-        <!-- Question and Result Containers -->
-        <div id="questionContainer" class="hidden"></div>
-        <div id="result" class="result"></div>
-    </div>
+  <!-- A/B buttons only shown when needed -->
+  <div class="choice-buttons" id="choice-buttons" style="display: none;">
+    <button onclick="handleABChoice('a')">A</button>
+    <button onclick="handleABChoice('b')">B</button>
+  </div>
 
-    <script>
-        const gameState = {
-            welcomeMessage: 
-                <p class="fade-in">Welcome, Oh... Who are you to pass through these lands?</p>
-                <p class="fade-in">No matter... Choose your path carefully if you don't want to become food for me...</p>
-            ,
-            currentPath: 0,
-            currentSubPath: 0
-        };
+  <script>
+    const output = document.getElementById("output");
+    const input = document.getElementById("input");
+    const inputArea = document.querySelector(".input-area");
+    const abButtons = document.getElementById("choice-buttons");
 
-        function selectOption(option) {
-            gameState.currentPath = option;
-            
-            if (option === 4) {
-                endGame();
-                return;
-            }
+    let stage = "main";
 
-            resetGame();
-            let subMenuHTML = '';
+    function print(text) {
+      output.textContent += `\n${text}`;
+      output.scrollTop = output.scrollHeight;
+    }
 
-            switch (option) {
-                case 1:
-                    document.getElementById('output').innerHTML = '<p class="fade-in">Well, you chose the ancient path, now is time to test you...</p>';
-                    subMenuHTML = 
-                        <p>Which quest do you want to solve?</p>
-                        <button onclick="selectSubOption(1)">1. Pre-Hispanic</button>
-                        <button onclick="selectSubOption(2)">2. Car</button>
-                    ;
-                    break;
-                case 2:
-                    document.getElementById('output').innerHTML = '<p class="fade-in">You have chosen the Digital rise path...</p>';
-                    subMenuHTML = 
-                        <p>What do you want! (I don\'t think you can survive...):</p>
-                        <button onclick="selectSubOption(1)">1. Internet</button>
-                        <button onclick="selectSubOption(2)">2. First Phone</button>
-                        <button onclick="selectSubOption(3)">3. Apple Phone</button>
-                    ;
-                    break;
-                case 3:
-                    document.getElementById('output').innerHTML = '<p class="fade-in">You have entered the latest path: *Modern path* timeline...</p>';
-                    subMenuHTML = 
-                        <p>Pick a node of evolution:</p>
-                        <button onclick="selectSubOption(1)">1. Android 🤖</button>
-                        <button onclick="selectSubOption(2)">2. 4G 🔄</button>
-                        <button onclick="selectSubOption(3)">3. AI 🧠</button>
-                    ;
-                    break;
-            }
+    function clearInput() {
+      input.value = "";
+      input.focus();
+    }
 
-            document.getElementById('subMenu').innerHTML = subMenuHTML;
-            document.getElementById('subMenu').classList.remove('hidden');
-            document.getElementById('mainMenu').classList.add('hidden');
-        }
+    function showInput(show) {
+      inputArea.style.display = show ? "flex" : "none";
+    }
 
-        function selectSubOption(subOption) {
-            gameState.currentSubPath = subOption;
-            resetGame();
+    function showABButtons(show) {
+      abButtons.style.display = show ? "flex" : "none";
+    }
 
-            let questionHTML = '<div class="question fade-in">';
+    function handleABChoice(choice) {
+      handleLogic(choice.toLowerCase());
+    }
 
-            if (gameState.currentPath === 1) {
-                questionHTML += (subOption === 1)
-                    ? 'What materials did they use to create their tools?</div>'
-                    : 'Who developed the first commercial car? (Hint: Did you hear of a >Ford< car?)</div>';
-            } else if (gameState.currentPath === 2) {
-                questionHTML += (subOption === 1)
-                    ? 'What protocol gave birth to the internet?</div>'
-                    : (subOption === 2)
-                    ? '📡 What company created the first commercial phone?</div>'
-                    : '📱 What was the iPhone\'s game-changing feature?</div>';
-            } else if (gameState.currentPath === 3) {
-                questionHTML += (subOption === 1)
-                    ? '🤖 What was the first Android phone?</div>'
-                    : (subOption === 2)
-                    ? 'What was before 4G?</div>'
-                    : '🧠 What is the most famous AI today?</div>';
-            }
+    function handleInput() {
+      const choice = input.value.trim().toLowerCase();
+      clearInput();
+      handleLogic(choice);
+    }
 
-            document.getElementById('questionContainer').innerHTML = questionHTML;
-            document.getElementById('questionContainer').classList.remove('hidden');
-            document.getElementById('subMenu').classList.add('hidden');
-        }
+    function handleLogic(choice) {
+      showABButtons(false);
+      showInput(true);
 
-        function checkAnswer(answer) {
-            let correct = false;
-            let message = '';
+      switch (stage) {
+        case "main":
+          if (choice === "1") {
+            stage = "ancient";
+            print("\nYou chose the ancient path...\nWhich quest?\n1. Pre-Hispanic\n2. Car");
+          } else if (choice === "2") {
+            stage = "digital";
+            print("\nYou chose the Digital Rise...\nPick one:\n1. Internet\n2. First Phone\n3. Apple Phone");
+          } else if (choice === "3") {
+            stage = "modern";
+            print("\nYou have entered the Modern Path...\nPick one:\n1. Android\n2. 4G\n3. AI");
+          } else if (choice === "4") {
+            print("\nFarewell, traveler... Until we meet again...");
+            print("\nThe secret code of one box is: a336903*2gcx!¿?");
+            print("May your journey be filled with wisdom...");
+            showInput(false);
+          } else {
+            print("\n❌ Invalid choice. Select a number between 1 and 4.");
+          }
+          break;
 
-            if (gameState.currentPath === 1) {
-                if (gameState.currentSubPath ===
-                    message = correct ? '✅ You are wise...' : '❌ The ancient souls say that isn\'t the correct path.';
-                } else if (gameState.currentSubPath === 2) {
-                    correct = (answer === 'a');
-                    message = correct ? '✅ Correct, well done!' : '❌ That\'s not the right answer, the first car was Ford!';
-                }
-            } else if (gameState.currentPath === 2) {
-                if (gameState.currentSubPath === 1) {
-                    correct = (answer === 'a');
-                    message = correct ? '✅ You unlocked the protocol of the internet.' : '❌ Incorrect... It\'s not governed by P2P.';
-                } else if (gameState.currentSubPath === 2) {
-                    correct = (answer === 'motorola');
-                    message = correct ? '✅ Correct... Motorola was the first commercial phone.' : '❌ Nope, try again.';
-                } else if (gameState.currentSubPath === 3) {
-                    correct = (answer === 'b');
-                    message = correct ? '✅ Correct! The touch screen was revolutionary.' : '❌ Try again...';
-                }
-            } else if (gameState.currentPath === 3) {
-                if (gameState.currentSubPath === 1) {
-                    correct = (answer === 'a');
-                    message = correct ? '✅ Correct! The HTC Dream was the first Android phone.' : '❌ Incorrect. Try again.';
-                } else if (gameState.currentSubPath === 2) {
-                    correct = (answer === 'a');
-                    message = correct ? '✅ Correct! 3G was the predecessor to 4G.' : '❌ Wrong... 2G came before 3G.';
-                } else if (gameState.currentSubPath === 3) {
-                    correct = (answer === 'a');
-                    message = correct ? '✅ You know the most famous AI today!' : '❌ Wrong! Maybe in another timeline...';
-                }
-            }
+        case "ancient":
+          if (choice === "1") {
+            stage = "ancient_q1";
+            print("What materials did they use to create their tools?\n a. Stone, Bone and Wood\n b. Iron, Copper and Diamond");
+            showInput(false);
+            showABButtons(true);
+          } else if (choice === "2") {
+            stage = "ancient_q2";
+            print("Who developed the first commercial car? (Hint: >Ford<)");
+          } else {
+            print("❌ Invalid. Choose 1 or 2.");
+          }
+          break;
 
-            showResult(message, correct);
-        }
+        case "ancient_q1":
+          if (choice === "a") {
+            print("✅ You are wise... Returning to main menu...");
+            stage = "main";
+          } else {
+            print("❌ The ancient souls say that isn't the correct path. Try again...");
+            stage = "main";
+          }
+          break;
 
-        function checkTextAnswer() {
-            const answer = document.getElementById('textAnswer').value.toLowerCase();
-            let correct = false;
-            let message = '';
+        case "ancient_q2":
+          if (choice === "henry ford") {
+            print("✅ Well, you chose correctly. Returning to main menu...");
+            stage = "main";
+          } else {
+            print(`❌ ${choice} is not the name whispered by him. Try again...`);
+            stage = "main";
+          }
+          break;
 
-            if (gameState.currentPath === 1 && gameState.currentSubPath === 2) {
-                correct = (answer === 'henry ford');
-                message = correct ? '✅ Correct! Henry Ford was the founder of Ford.' : ❌ Sorry, ${answer} is not the name whispered by him.;
-            } else if (gameState.currentPath === 2 && gameState.currentSubPath === 2) {
-                correct = (answer === 'motorola');
-                message = correct ? '✅ Correct, Motorola created the first commercial phone.' : ❌ ${answer}? That's not the name on the scrolls.;
-            }
+        case "digital":
+          if (choice === "1") {
+            stage = "digital_q1";
+            print("What protocol gave birth to the internet?\n a. TCP/IP\n b. P2P");
+            showInput(false);
+            showABButtons(true);
+          } else if (choice === "2") {
+            stage = "digital_q2";
+            print("📡 What company created the first commercial phone?");
+          } else if (choice === "3") {
+            stage = "digital_q3";
+            print("📱 What was the iPhone's game-changing feature?\n a. Take photos\n b. Touch screen");
+            showInput(false);
+            showABButtons(true);
+          } else {
+            print("❌ Invalid. Choose 1, 2, or 3.");
+          }
+          break;
 
-            showResult(message, correct);
-        }
+        case "digital_q1":
+          if (choice === "a") {
+            print("✅ You have unlocked the code of communication. Returning to main menu...");
+          } else {
+            print("❌ Incorrect... The net isn't governed by P2P. Try again...");
+          }
+          stage = "main";
+          break;
 
-        function showResult(message, isCorrect) {
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = <p class="fade-in">${message}</p>;
-            resultDiv.className = isCorrect ? 'result correct' : 'result incorrect';
-            
-            setTimeout(() => {
-                resultDiv.innerHTML += '<button onclick="returnToMainMenu()">Return to Main Menu</button>';
-            }, 500);
-        }
+        case "digital_q2":
+          if (choice === "motorola") {
+            print("✅ Correct... Returning to main menu...");
+          } else {
+            print(`❌ ${choice}? That's not the one inscribed in the scrolls. Try again...`);
+          }
+          stage = "main";
+          break;
 
-        function returnToMainMenu() {
-            document.getElementById('subMenu').classList.add('hidden');
-            document.getElementById('questionContainer').classList.add('hidden');
-            document.getElementById('result').innerHTML = '';
-            document.getElementById('result').className = 'result';
-            document.getElementById('output').innerHTML = gameState.welcomeMessage;
-            document.getElementById('mainMenu').classList.remove('hidden');
-        }
+        case "digital_q3":
+          if (choice === "b") {
+            print("✅ Correct! Returning to main menu...");
+          } else {
+            print("❌ Try again...");
+          }
+          stage = "main";
+          break;
 
-        function endGame() {
-            document.getElementById('output').innerHTML = '<p class="fade-in">Well, traveler... Until we meet again, you survived this time but the next may not be the same...</p>';
-            document.getElementById('mainMenu').classList.add('hidden');
-            document.getElementById('subMenu').classList.add('hidden');
-            document.getElementById('questionContainer').classList.add('hidden');
-            document.getElementById('result').innerHTML = 
-                '<p class="fade-in">The secret code of one box is: a336903*2gcx!¿?</p>' +
-                '<p class="fade-in">May you have not finished...</p>';
-            document.getElementById('result').className = 'result';
-        }
+        case "modern":
+          if (choice === "1") {
+            stage = "modern_q1";
+            print("🤖 What was the first Android phone?\n a. HTC Dream\n b. Google Nexus");
+            showInput(false);
+            showABButtons(true);
+          } else if (choice === "2") {
+            stage = "modern_q2";
+            print("What was before 4G?\n a. 3G\n b. 2G");
+            showInput(false);
+            showABButtons(true);
+          } else if (choice === "3") {
+            stage = "modern_q3";
+            print("🧠 What is the most famous AI today?\n a. ChatGPT\n b. Gemini");
+            showInput(false);
+            showABButtons(true);
+          } else {
+            print("❌ Invalid. Choose 1, 2, or 3.");
+          }
+          break;
 
-        function resetGame() {
-            document.getElementById('subMenu').innerHTML = '';
-            document.getElementById('questionContainer').innerHTML = '';
-            document.getElementById('result').innerHTML = '';
-            document.getElementById('result').className = 'result';
-        }
-    </script>
+        case "modern_q1":
+          if (choice === "a") {
+            print("✅ Well done! Returning to main menu...");
+          } else {
+            print("❌ Incorrect. Try again...");
+          }
+          stage = "main";
+          break;
+
+        case "modern_q2":
+          if (choice === "a") {
+            print("✅ Correct! Returning to main menu...");
+          } else {
+            print("❌ Not fast enough... Try again...");
+          }
+          stage = "main";
+          break;
+
+        case "modern_q3":
+          if (choice === "a") {
+            print("✅ You've met the mind that guides this test... Returning to main menu...");
+          } else {
+            print("❌ Perhaps in another timeline... Try again...");
+          }
+          stage = "main";
+          break;
+      }
+    }
+
+    window.onload = () => input.focus();
+  </script>
 </body>
 </html>
