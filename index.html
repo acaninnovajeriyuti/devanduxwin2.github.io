@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Secret Tech Challenge</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='20'>☠</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='20'>💀</text></svg>">
 </head>
 <body>
   <audio autoplay loop>
@@ -15,7 +15,9 @@
 
   <div class="container">
     <h1>☠ Secret Tech Challenge ☠</h1>
-    <pre id="output">Welcome, Oh... Who are you to pass through these lands?\nNo matter... Choose your path carefully if you don't want to become food for me...</pre>
+    <div class="screen" id="output">Welcome, Oh... Who are you to pass through these lands?<br>No matter... Choose your path carefully if you don't want to become food for me...</div>
+
+    <div class="progress" id="progress">Progress: 0 / 8</div>
 
     <div class="button-group" id="main-buttons">
       <button onclick="selectOption('1')">1. Pre-Hispanic ➡ Car</button>
