@@ -1,5 +1,6 @@
 const output = document.getElementById("output");
 const input = document.getElementById("input");
+const progress = document.getElementById("progress");
 const mainButtons = document.getElementById("main-buttons");
 const inputGroup = document.getElementById("text-input");
 const abButtons = document.getElementById("choice-buttons");
@@ -20,12 +21,17 @@ let completed = {
 };
 
 function print(text) {
-  output.textContent += `\n${text}`;
-  output.scrollTop = output.scrollHeight;
+  output.innerHTML = text;
 }
 
 function show(element, show = true) {
   element.style.display = show ? "flex" : "none";
+}
+
+function updateProgress() {
+  const count = Object.values(completed).filter(v => v).length;
+  progress.textContent = `Progress: ${count} / 8`;
+  if (count === 8) show(exitButton);
 }
 
 function selectOption(choice) {
@@ -33,11 +39,11 @@ function selectOption(choice) {
   show(mainButtons, false);
   show(inputGroup, true);
   if (stage === "ancient") {
-    print("\nChoose your quest:\n1. Pre-Hispanic\n2. Car");
+    print("Choose your quest:\n1. Pre-Hispanic\n2. Car");
   } else if (stage === "digital") {
-    print("\nChoose your challenge:\n1. Internet\n2. First Phone\n3. iPhone");
+    print("Choose your challenge:\n1. Internet\n2. First Phone\n3. iPhone");
   } else if (stage === "modern") {
-    print("\nSelect a timeline:\n1. Android\n2. 4G\n3. AI");
+    print("Select a timeline:\n1. Android\n2. 4G\n3. AI");
   }
 }
 
@@ -53,12 +59,7 @@ function handleInput(choice) {
   if (stage === "ancient") {
     if (choice === "1") {
       stage = "ancient1";
-      shuffleAB(
-        "What materials did they use to create tools?",
-        "Stone, Bone and Wood",
-        "Iron, Copper and Diamond",
-        "a"
-      );
+      shuffleAB("What materials did they use to create tools?", "Stone, Bone and Wood", "Iron, Copper and Diamond", "a");
     } else if (choice === "2") {
       stage = "ancient2";
       print("Who developed the first commercial car?");
@@ -68,6 +69,7 @@ function handleInput(choice) {
     if (choice === "henry ford") {
       print("✅ Correct! Returning...");
       completed.ancient2 = true;
+      updateProgress();
       reset();
     } else {
       print("❌ Wrong. Try again.");
@@ -89,6 +91,7 @@ function handleInput(choice) {
     if (choice === "motorola") {
       print("✅ Correct! Returning...");
       completed.digital2 = true;
+      updateProgress();
       reset();
     } else {
       print("❌ Try again.");
@@ -106,8 +109,6 @@ function handleInput(choice) {
       shuffleAB("🧠 Most famous AI today?", "ChatGPT", "Gemini", "a");
     }
   }
-
-  checkCompletion();
 }
 
 function shuffleAB(question, optA, optB, correct) {
@@ -118,19 +119,19 @@ function shuffleAB(question, optA, optB, correct) {
 
   document.getElementById("btn-a").textContent = "a. " + randomized.a;
   document.getElementById("btn-b").textContent = "b. " + randomized.b;
-  print(`\n${question}`);
+  print(question);
   show(abButtons);
 }
 
 function handleABChoice(choice) {
   if (choice === randomized.correct) {
-    print("✅ Correct!");
+    print("✅ Correct! Returning...");
     completed[stage] = true;
+    updateProgress();
     reset();
   } else {
     print("❌ Wrong. Try again.");
   }
-  checkCompletion();
 }
 
 function reset() {
@@ -140,14 +141,6 @@ function reset() {
   show(inputGroup, false);
 }
 
-function checkCompletion() {
-  if (Object.values(completed).every(v => v)) {
-    show(exitButton);
-  }
-}
-
 function exitGame() {
-  print("\n🚪 Farewell, traveler...");
-  print("🔐 Secret code: a336903*2gcx!¿?");
-  print("May your journey be filled with wisdom...");
+  print("🚪 Farewell, traveler...<br>🔐 Secret code: <strong>45985</strong><br>May your journey be filled with wisdom...");
 }
