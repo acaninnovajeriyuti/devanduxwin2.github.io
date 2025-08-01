@@ -4,220 +4,40 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Secret Tech Challenge</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><text y='50%' x='50%' dominant-baseline='middle' text-anchor='middle' font-size='20'>💀</text></svg>">
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='20'>💀</text></svg>">
 </head>
 <body>
-  <h1>☠ Secret Tech Challenge ☠</h1>
+  <audio autoplay loop>
+    <source src="ambient.mp3" type="audio/mpeg" />
+    Your browser does not support background music.
+  </audio>
 
-  <div id="output">
-    Welcome, Oh... Who are you to pass through these lands? No matter... Choose your path carefully if you don't want to become food for me...
+  <div class="container">
+    <h1>☠ Secret Tech Challenge ☠</h1>
+    <pre id="output">Welcome, Oh... Who are you to pass through these lands?\nNo matter... Choose your path carefully if you don't want to become food for me...</pre>
+
+    <div class="button-group" id="main-buttons">
+      <button onclick="selectOption('1')">1. Pre-Hispanic ➡ Car</button>
+      <button onclick="selectOption('2')">2. Internet ➡ iPhone</button>
+      <button onclick="selectOption('3')">3. Android ➡ AI</button>
+    </div>
+
+    <div class="input-group" id="choice-buttons" style="display: none;">
+      <button id="btn-a" onclick="handleABChoice('a')">A</button>
+      <button id="btn-b" onclick="handleABChoice('b')">B</button>
+    </div>
+
+    <div class="input-group" id="text-input" style="display: none;">
+      <input type="text" id="input" placeholder="Your answer...">
+      <button onclick="submitText()">Submit</button>
+    </div>
+
+    <div class="exit-group" id="exit-button" style="display: none;">
+      <button onclick="exitGame()">🚪 Exit</button>
+    </div>
   </div>
 
-  <!-- Main menu buttons -->
-  <div class="main-buttons" id="main-buttons">
-    <button onclick="handleLogic('1')">1. Pre-Hispanic to Car</button>
-    <button onclick="handleLogic('2')">2. Internet to iPhone</button>
-    <button onclick="handleLogic('3')">3. Android to AI</button>
-    <button onclick="handleLogic('4')">4. Exit</button>
-  </div>
-
-  <!-- Text input area (only for text answers like "motorola") -->
-  <div class="input-area" id="input-area" style="display: none;">
-    <input type="text" id="input" placeholder="Type your answer..." />
-    <button onclick="handleInput()">Submit</button>
-  </div>
-
-  <!-- A/B choice buttons -->
-  <div class="choice-buttons" id="choice-buttons" style="display: none;">
-    <button onclick="handleABChoice('a')">A</button>
-    <button onclick="handleABChoice('b')">B</button>
-  </div>
-
-  <script>
-    const output = document.getElementById("output");
-    const input = document.getElementById("input");
-    const mainButtons = document.getElementById("main-buttons");
-    const inputArea = document.getElementById("input-area");
-    const abButtons = document.getElementById("choice-buttons");
-
-    let stage = "main";
-
-    function print(text) {
-      output.textContent += `\n${text}`;
-      output.scrollTop = output.scrollHeight;
-    }
-
-    function clearInput() {
-      input.value = "";
-      input.focus();
-    }
-
-    function show(element, show) {
-      element.style.display = show ? "flex" : "none";
-    }
-
-    function handleABChoice(choice) {
-      handleLogic(choice.toLowerCase());
-    }
-
-    function handleInput() {
-      const choice = input.value.trim().toLowerCase();
-      clearInput();
-      handleLogic(choice);
-    }
-
-    function handleLogic(choice) {
-      // Reset all
-      show(mainButtons, false);
-      show(inputArea, false);
-      show(abButtons, false);
-
-      switch (stage) {
-        case "main":
-          if (choice === "1") {
-            stage = "ancient";
-            print("\nYou chose the ancient path...\nWhich quest?\n1. Pre-Hispanic\n2. Car");
-            show(inputArea, true);
-          } else if (choice === "2") {
-            stage = "digital";
-            print("\nYou chose the Digital Rise...\nPick one:\n1. Internet\n2. First Phone\n3. Apple Phone");
-            show(inputArea, true);
-          } else if (choice === "3") {
-            stage = "modern";
-            print("\nYou have entered the Modern Path...\nPick one:\n1. Android\n2. 4G\n3. AI");
-            show(inputArea, true);
-          } else if (choice === "4") {
-            print("\nFarewell, traveler... Until we meet again...");
-            print("\nThe secret code of one box is: 22334455");
-            print("May your journey be filled with wisdom...");
-          } else {
-            print("❌ Invalid choice. Please select a number between 1 and 4.");
-            show(mainButtons, true);
-          }
-          break;
-
-        case "ancient":
-          if (choice === "1") {
-            stage = "ancient_q1";
-            print("What materials did they use to create their tools?\n a. Stone, Bone and Wood\n b. Iron, Copper and Diamond");
-            show(abButtons, true);
-          } else if (choice === "2") {
-            stage = "ancient_q2";
-            print("Who developed the first commercial car? (Hint: >Ford<)");
-            show(inputArea, true);
-          } else {
-            print("❌ Invalid. Choose 1 or 2.");
-            show(inputArea, true);
-          }
-          break;
-
-        case "ancient_q1":
-          if (choice === "a") {
-            print("✅ You are wise... Returning to main menu...");
-          } else {
-            print("❌ The ancient souls say that isn't the correct path. Try again...");
-          }
-          stage = "main";
-          show(mainButtons, true);
-          break;
-
-        case "ancient_q2":
-          if (choice === "henry ford") {
-            print("✅ Well, you chose correctly. Returning to main menu...");
-          } else {
-            print(`❌ ${choice} is not the name whispered by him. Try again...`);
-          }
-          stage = "main";
-          show(mainButtons, true);
-          break;
-
-        case "digital":
-          if (choice === "1") {
-            stage = "digital_q1";
-            print("What protocol gave birth to the internet?\n a. TCP/IP\n b. P2P");
-            show(abButtons, true);
-          } else if (choice === "2") {
-            stage = "digital_q2";
-            print("📡 What company created the first commercial phone?");
-            show(inputArea, true);
-          } else if (choice === "3") {
-            stage = "digital_q3";
-            print("📱 What was the iPhone's game-changing feature?\n a. Take photos\n b. Touch screen");
-            show(abButtons, true);
-          } else {
-            print("❌ Invalid. Choose 1, 2, or 3.");
-            show(inputArea, true);
-          }
-          break;
-
-        case "digital_q1":
-          if (choice === "a") {
-            print("✅ You have unlocked the code of communication. Returning to main menu...");
-          } else {
-            print("❌ Incorrect... The net isn't governed by P2P. Try again...");
-          }
-          stage = "main";
-          show(mainButtons, true);
-          break;
-
-        case "digital_q2":
-          if (choice === "motorola") {
-            print("✅ Correct... Returning to main menu...");
-          } else {
-            print(`❌ ${choice}? That's not the one inscribed in the scrolls. Try again...`);
-          }
-          stage = "main";
-          show(mainButtons, true);
-          break;
-
-        case "digital_q3":
-          if (choice === "b") {
-            print("✅ Correct! Returning to main menu...");
-          } else {
-            print("❌ Try again...");
-          }
-          stage = "main";
-          show(mainButtons, true);
-          break;
-
-        case "modern":
-          if (choice === "1") {
-            stage = "modern_q1";
-            print("🤖 What was the first Android phone?\n a. HTC Dream\n b. Google Nexus");
-            show(abButtons, true);
-          } else if (choice === "2") {
-            stage = "modern_q2";
-            print("What was before 4G?\n a. 3G\n b. 2G");
-            show(abButtons, true);
-          } else if (choice === "3") {
-            stage = "modern_q3";
-            print("🧠 What is the most famous AI today?\n a. ChatGPT\n b. Gemini");
-            show(abButtons, true);
-          } else {
-            print("❌ Invalid. Choose 1, 2, or 3.");
-            show(inputArea, true);
-          }
-          break;
-
-        case "modern_q1":
-        case "modern_q2":
-        case "modern_q3":
-          if (choice === "a") {
-            print("✅ Correct! Returning to main menu...");
-          } else {
-            print("❌ Perhaps in another timeline... Try again...");
-          }
-          stage = "main";
-          show(mainButtons, true);
-          break;
-      }
-    }
-
-    window.onload = () => {
-      input.focus();
-      show(mainButtons, true);
-    };
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
