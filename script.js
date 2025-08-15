@@ -142,5 +142,5 @@ function reset() {
 }
 
 function exitGame() {
-  print("🚪 Farewell, traveler...<br>🔐 Secret code: <strong>45985</strong><br>May your journey be filled with wisdom...");
+  print("🚪 Farewell, traveler...<br>🔐 Secret code: <strong>FIND THE CARDS</strong><br>May your journey be filled with wisdom...");
 }
