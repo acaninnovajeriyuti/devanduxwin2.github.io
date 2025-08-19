@@ -1,44 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Secret Tech Challenge</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='20'>💀</text></svg>">
 </head>
 <body>
-  <audio autoplay loop>
-    <source src="ambient.mp3" type="audio/mpeg" />
-    Your browser does not support background music.
-  </audio>
-
-  <div class="container">
+  <div id="game">
     <h1>☠ Secret Tech Challenge ☠</h1>
-    <div class="screen" id="output">Welcome, Oh... Who are you to pass through these lands?<br>No matter... Choose your path carefully if you don't want to become food for me...</div>
 
-    <div class="progress" id="progress">Progress: 0 / 8</div>
+    <!-- Progress Bar -->
+    <div id="progress-container">
+      <div id="progress-bar"></div>
+    </div>
+    <p id="progress-text">Progress: 0 / 8</p>
 
-    <div class="button-group" id="main-buttons">
-      <button onclick="selectOption('1')">1. Pre-Hispanic ➡ Car</button>
-      <button onclick="selectOption('2')">2. Internet ➡ iPhone</button>
-      <button onclick="selectOption('3')">3. Android ➡ AI</button>
+    <!-- Game Output -->
+    <div id="output">Choose a path to begin...</div>
+
+    <!-- Main Menu -->
+    <div id="main-buttons" class="button-group">
+      <button onclick="selectOption('1')">Pre-Hispanic → Car</button>
+      <button onclick="selectOption('2')">Internet → iPhone</button>
+      <button onclick="selectOption('3')">Android → AI</button>
     </div>
 
-    <div class="input-group" id="choice-buttons" style="display: none;">
-      <button id="btn-a" onclick="handleABChoice('a')">A</button>
-      <button id="btn-b" onclick="handleABChoice('b')">B</button>
-    </div>
-
-    <div class="input-group" id="text-input" style="display: none;">
-      <input type="text" id="input" placeholder="Your answer...">
+    <!-- Input group -->
+    <div id="text-input" class="input-group" style="display:none;">
+      <input id="input" type="text" placeholder="Type answer here...">
       <button onclick="submitText()">Submit</button>
     </div>
 
-    <div class="exit-group" id="exit-button" style="display: none;">
-      <button onclick="exitGame()">🚪 Exit</button>
+    <!-- A/B buttons -->
+    <div id="choice-buttons" class="button-group" style="display:none;">
+      <button id="btn-a" onclick="handleABChoice('a')">a</button>
+      <button id="btn-b" onclick="handleABChoice('b')">b</button>
+    </div>
+
+    <!-- Exit Button -->
+    <div>
+      <button id="exit-button" onclick="exitGame()" style="display:none;">Exit</button>
     </div>
   </div>
+
+  <!-- Ambient Music -->
+  <audio autoplay loop id="bg-music">
+    <source src="ambient.mp3" type="audio/mpeg">
+  </audio>
 
   <script src="script.js"></script>
 </body>
