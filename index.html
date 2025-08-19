@@ -4,48 +4,49 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Secret Tech Challenge</title>
+  <link rel="icon" href="skull.png">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="game">
-    <h1>☠ Secret Tech Challenge ☠</h1>
+  <h1>☠ Secret Tech Challenge ☠</h1>
+  
+  <!-- Lives row -->
+  <div id="lives"></div>
 
-    <!-- Progress Bar -->
-    <div id="progress-container">
-      <div id="progress-bar"></div>
-    </div>
-    <p id="progress-text">Progress: 0 / 8</p>
+  <!-- Progress bar -->
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+  <p id="progress-text">Progress: 0/8</p>
 
-    <!-- Game Output -->
-    <div id="output">Choose a path to begin...</div>
+  <div id="output">Welcome, traveler... Choose your path carefully!</div>
 
-    <!-- Main Menu -->
-    <div id="main-buttons" class="button-group">
-      <button onclick="selectOption('1')">Pre-Hispanic → Car</button>
-      <button onclick="selectOption('2')">Internet → iPhone</button>
-      <button onclick="selectOption('3')">Android → AI</button>
-    </div>
-
-    <!-- Input group -->
-    <div id="text-input" class="input-group" style="display:none;">
-      <input id="input" type="text" placeholder="Type answer here...">
-      <button onclick="submitText()">Submit</button>
-    </div>
-
-    <!-- A/B buttons -->
-    <div id="choice-buttons" class="button-group" style="display:none;">
-      <button id="btn-a" onclick="handleABChoice('a')">a</button>
-      <button id="btn-b" onclick="handleABChoice('b')">b</button>
-    </div>
-
-    <!-- Exit Button -->
-    <div>
-      <button id="exit-button" onclick="exitGame()" style="display:none;">Exit</button>
-    </div>
+  <!-- Main menu -->
+  <div id="main-buttons" class="btn-group">
+    <button onclick="selectOption('1')">1. Pre-Hispanic → Car</button>
+    <button onclick="selectOption('2')">2. Internet → iPhone</button>
+    <button onclick="selectOption('3')">3. Android → AI</button>
   </div>
 
-  <!-- Ambient Music -->
-  <audio autoplay loop id="bg-music">
+  <!-- Input group -->
+  <div id="text-input" style="display:none;" class="btn-group">
+    <input id="input" type="text" placeholder="Type your answer">
+    <button onclick="submitText()">Submit</button>
+  </div>
+
+  <!-- A/B buttons -->
+  <div id="choice-buttons" style="display:none;" class="btn-group">
+    <button id="btn-a" onclick="handleABChoice('a')"></button>
+    <button id="btn-b" onclick="handleABChoice('b')"></button>
+  </div>
+
+  <!-- Exit -->
+  <div class="btn-group">
+    <button id="exit-button" onclick="exitGame()" style="display:none;">🚪 Exit</button>
+  </div>
+
+  <!-- Ambient music -->
+  <audio autoplay loop>
     <source src="ambient.mp3" type="audio/mpeg">
   </audio>
 
