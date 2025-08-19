@@ -9,16 +9,20 @@ const exitButton = document.getElementById("exit-button");
 let stage = "main";
 let correctAnswer = "";
 let randomized = {};
-let completed = {
-  ancient1: false,
-  ancient2: false,
-  digital1: false,
-  digital2: false,
-  digital3: false,
-  modern1: false,
-  modern2: false,
-  modern3: false
-};
+let completed = resetCompleted();
+
+function resetCompleted() {
+  return {
+    ancient1: false,
+    ancient2: false,
+    digital1: false,
+    digital2: false,
+    digital3: false,
+    modern1: false,
+    modern2: false,
+    modern3: false
+  };
+}
 
 function print(text) {
   output.innerHTML = text;
@@ -64,16 +68,14 @@ function handleInput(choice) {
       stage = "ancient2";
       print("Who developed the first commercial car?");
       show(inputGroup, true);
+    } else {
+      wrongAnswer();
     }
   } else if (stage === "ancient2") {
     if (choice === "henry ford") {
-      print("✅ Correct! Returning...");
-      completed.ancient2 = true;
-      updateProgress();
-      reset();
+      correctAnswerGiven("ancient2");
     } else {
-      print("❌ Wrong. Try again.");
-      show(inputGroup, true);
+      wrongAnswer();
     }
   } else if (stage === "digital") {
     if (choice === "1") {
@@ -86,16 +88,14 @@ function handleInput(choice) {
     } else if (choice === "3") {
       stage = "digital3";
       shuffleAB("📱 iPhone's game-changing feature?", "Touch screen", "Take photos", "a");
+    } else {
+      wrongAnswer();
     }
   } else if (stage === "digital2") {
     if (choice === "motorola") {
-      print("✅ Correct! Returning...");
-      completed.digital2 = true;
-      updateProgress();
-      reset();
+      correctAnswerGiven("digital2");
     } else {
-      print("❌ Try again.");
-      show(inputGroup, true);
+      wrongAnswer();
     }
   } else if (stage === "modern") {
     if (choice === "1") {
@@ -107,6 +107,8 @@ function handleInput(choice) {
     } else if (choice === "3") {
       stage = "modern3";
       shuffleAB("🧠 Most famous AI today?", "ChatGPT", "Gemini", "a");
+    } else {
+      wrongAnswer();
     }
   }
 }
@@ -125,22 +127,34 @@ function shuffleAB(question, optA, optB, correct) {
 
 function handleABChoice(choice) {
   if (choice === randomized.correct) {
-    print("✅ Correct! Returning...");
-    completed[stage] = true;
-    updateProgress();
-    reset();
+    correctAnswerGiven(stage);
   } else {
-    print("❌ Wrong. Try again.");
+    wrongAnswer();
   }
 }
 
-function reset() {
+function correctAnswerGiven(key) {
+  print("✅ Correct! Returning...");
+  completed[key] = true;
+  updateProgress();
+  resetMenu();
+}
+
+function wrongAnswer() {
+  print("💀 Wrong answer! You must restart from the beginning...");
+  completed = resetCompleted();
+  updateProgress();
+  resetMenu();
+}
+
+function resetMenu() {
   stage = "main";
   show(mainButtons);
   show(abButtons, false);
   show(inputGroup, false);
+  show(exitButton, false);
 }
 
 function exitGame() {
-  print("🚪 Farewell, traveler...<br>🔐 Secret code: <strong>FIND THE CARDS</strong><br>May your journey be filled with wisdom...");
+  print("🚪 Farewell, traveler...<br>🔐 Secret code: <strong>a336903*2gcx!¿?</strong><br>May your journey be filled with wisdom...");
 }
