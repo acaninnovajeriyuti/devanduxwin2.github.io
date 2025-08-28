@@ -227,6 +227,8 @@ function stringToBinary(str) {
   ).join(' ');
 }
 
+// ...existing code...
+
 function generateCode(length = 6, type = "alphanumeric") {
   const chars = type === "numeric" ? "0123456789" : "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   let code = '';
@@ -253,12 +255,11 @@ function codeHints(code, type = "alphanumeric") {
 }
 
 function showCompletionTask() {
-  const binMsg = stringToBinary('COMPLETITION_TASK');
   const code1 = generateCode(6, "alphanumeric");
   const code2 = generateCode(6, "numeric");
 
   print(`🟢 All quests completed!<br><br>
-    <strong>Encrypted message (binary):</strong><br>${binMsg}<br><br>
+    <strong>Encrypted message (numeric code):</strong><br>${code2}<br><br>
     <strong>Code 1 (memorize, will disappear):</strong><br>
     <span id="code1">${code1}</span>
     <br><br>
@@ -280,7 +281,7 @@ function showCompletionTask() {
     if (code1Span) code1Span.textContent = '[Code 1 erased. Memorize it!]';
 
     print(`🟢 All quests completed!<br><br>
-      <strong>Encrypted message (binary):</strong><br>${binMsg}<br><br>
+      <strong>Encrypted message (numeric code):</strong><br>${code2}<br><br>
       <strong>Code 1:</strong> [Code 1 erased. Memorize it!]<br><br>
       <strong>Code 2 (decipher using hints):</strong><br>${codeHints(code2, "numeric")}<br><br>
       <input id="input-code1" type="text" placeholder="Enter Code 1"><br>
@@ -322,6 +323,8 @@ function showCompletionTask() {
     };
   }, 7000);
 }
+
+// ...existing
 
 // Init
 renderLives();
