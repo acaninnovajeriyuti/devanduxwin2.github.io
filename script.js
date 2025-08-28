@@ -217,7 +217,7 @@ function resetMenu() {
 }
 
 function exitGame() {
-  print("🚪 Farewell, traveler... The code is: a336903*2gcx!¿?");
+  print("🚪 Farewell, traveler... The code is: 54638464");
 }
 
 // === Final Challenge ===
