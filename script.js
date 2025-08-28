@@ -227,8 +227,8 @@ function stringToBinary(str) {
   ).join(' ');
 }
 
-function generateCode(length = 6) {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+function generateCode(length = 6, type = "alphanumeric") {
+  const chars = type === "numeric" ? "0123456789" : "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   let code = '';
   for (let i = 0; i < length; i++) {
     code += chars[Math.floor(Math.random() * chars.length)];
@@ -236,22 +236,26 @@ function generateCode(length = 6) {
   return code;
 }
 
-function codeHints(code) {
+function codeHints(code, type = "alphanumeric") {
   let hints = [];
   for (let i = 0; i < code.length; i++) {
     const c = code[i];
-    if (c === 'A') hints.push(`Letter ${i+1}: First letter of the alphabet`);
-    else if ('AEIOU'.includes(c)) hints.push(`Letter ${i+1}: It is a vowel`);
-    else if ('23456789'.includes(c)) hints.push(`Letter ${i+1}: It is a number`);
-    else hints.push(`Letter ${i+1}: It is a consonant`);
+    if (type === "numeric") {
+      hints.push(`Digit ${i+1}: ${c % 2 === 0 ? "Even" : "Odd"} number`);
+    } else {
+      if (c === 'A') hints.push(`Letter ${i+1}: First letter of the alphabet`);
+      else if ('AEIOU'.includes(c)) hints.push(`Letter ${i+1}: It is a vowel`);
+      else if ('23456789'.includes(c)) hints.push(`Letter ${i+1}: It is a number`);
+      else hints.push(`Letter ${i+1}: It is a consonant`);
+    }
   }
   return hints.join('<br>');
 }
 
 function showCompletionTask() {
   const binMsg = stringToBinary('COMPLETITION_TASK');
-  const code1 = generateCode();
-  const code2 = generateCode();
+  const code1 = generateCode(6, "alphanumeric");
+  const code2 = generateCode(6, "numeric");
 
   print(`🟢 All quests completed!<br><br>
     <strong>Encrypted message (binary):</strong><br>${binMsg}<br><br>
@@ -271,7 +275,6 @@ function showCompletionTask() {
     }
   }, 1000);
 
-  // Hide code1 after 7 seconds and show code2 hints
   setTimeout(() => {
     const code1Span = document.getElementById('code1');
     if (code1Span) code1Span.textContent = '[Code 1 erased. Memorize it!]';
@@ -279,7 +282,7 @@ function showCompletionTask() {
     print(`🟢 All quests completed!<br><br>
       <strong>Encrypted message (binary):</strong><br>${binMsg}<br><br>
       <strong>Code 1:</strong> [Code 1 erased. Memorize it!]<br><br>
-      <strong>Code 2 (decipher using hints):</strong><br>${codeHints(code2)}<br><br>
+      <strong>Code 2 (decipher using hints):</strong><br>${codeHints(code2, "numeric")}<br><br>
       <input id="input-code1" type="text" placeholder="Enter Code 1"><br>
       <input id="input-code2" type="text" placeholder="Enter Code 2"><br>
       <button id="submit-codes">Submit Codes</button>
@@ -287,7 +290,6 @@ function showCompletionTask() {
       <span id="challenge-timer" style="color:yellow;"></span>
     `);
 
-    // Timer for challenge (optional, 60 seconds)
     let challengeTime = 60;
     const challengeTimerSpan = document.getElementById('challenge-timer');
     challengeTimerSpan.textContent = `Time left: ${challengeTime} seconds`;
@@ -308,7 +310,7 @@ function showCompletionTask() {
 
     document.getElementById('submit-codes').onclick = function() {
       const val1 = document.getElementById('input-code1').value.trim().toUpperCase();
-      const val2 = document.getElementById('input-code2').value.trim().toUpperCase();
+      const val2 = document.getElementById('input-code2').value.trim();
       const result = document.getElementById('result');
       if (val1 === code1 && val2 === code2) {
         clearInterval(challengeInterval);
@@ -324,4 +326,4 @@ function showCompletionTask() {
 // Init
 renderLives();
 updateProgress();
-resetMenu()
+resetMenu();
