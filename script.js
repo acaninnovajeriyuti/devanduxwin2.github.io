@@ -29,7 +29,7 @@ function resetCompleted() {
 }
 
 function print(text) {
-  output.textContent = text;
+  output.innerHTML = text;
 }
 
 function show(el, visible = true) {
@@ -50,9 +50,17 @@ function updateProgress() {
   progressText.textContent = `Progress: ${count} / ${total}`;
   progressBar.style.width = `${(count / total) * 100}%`;
 
-  const allDone = count === total;
-  show(exitButton, allDone);
   renderLives();
+
+  if (count === total) {
+    show(mainButtons, false);
+    show(inputGroup, false);
+    show(abButtons, false);
+    show(exitButton, false);
+    showCompletionTask();
+  } else {
+    show(exitButton, false);
+  }
 }
 
 function wrongAnswer() {
@@ -212,7 +220,108 @@ function exitGame() {
   print("🚪 Farewell, traveler... The code is: a336903*2gcx!¿?");
 }
 
+// === Final Challenge ===
+function stringToBinary(str) {
+  return str.split('').map(char =>
+    char.charCodeAt(0).toString(2).padStart(8, '0')
+  ).join(' ');
+}
+
+function generateCode(length = 6) {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = '';
+  for (let i = 0; i < length; i++) {
+    code += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return code;
+}
+
+function codeHints(code) {
+  let hints = [];
+  for (let i = 0; i < code.length; i++) {
+    const c = code[i];
+    if (c === 'A') hints.push(`Letter ${i+1}: First letter of the alphabet`);
+    else if ('AEIOU'.includes(c)) hints.push(`Letter ${i+1}: It is a vowel`);
+    else if ('23456789'.includes(c)) hints.push(`Letter ${i+1}: It is a number`);
+    else hints.push(`Letter ${i+1}: It is a consonant`);
+  }
+  return hints.join('<br>');
+}
+
+function showCompletionTask() {
+  const binMsg = stringToBinary('COMPLETITION_TASK');
+  const code1 = generateCode();
+  const code2 = generateCode();
+
+  print(`🟢 All quests completed!<br><br>
+    <strong>Encrypted message (binary):</strong><br>${binMsg}<br><br>
+    <strong>Code 1 (memorize, will disappear):</strong><br>
+    <span id="code1">${code1}</span>
+    <br><br>
+    <span id="timer" style="color:yellow;">You have 7 seconds to memorize Code 1...</span>
+  `);
+
+  let timer = 7;
+  const timerSpan = document.getElementById('timer');
+  const interval = setInterval(() => {
+    timer--;
+    if (timerSpan) timerSpan.textContent = `You have ${timer} seconds to memorize Code 1...`;
+    if (timer <= 0) {
+      clearInterval(interval);
+    }
+  }, 1000);
+
+  // Hide code1 after 7 seconds and show code2 hints
+  setTimeout(() => {
+    const code1Span = document.getElementById('code1');
+    if (code1Span) code1Span.textContent = '[Code 1 erased. Memorize it!]';
+
+    print(`🟢 All quests completed!<br><br>
+      <strong>Encrypted message (binary):</strong><br>${binMsg}<br><br>
+      <strong>Code 1:</strong> [Code 1 erased. Memorize it!]<br><br>
+      <strong>Code 2 (decipher using hints):</strong><br>${codeHints(code2)}<br><br>
+      <input id="input-code1" type="text" placeholder="Enter Code 1"><br>
+      <input id="input-code2" type="text" placeholder="Enter Code 2"><br>
+      <button id="submit-codes">Submit Codes</button>
+      <div id="result"></div>
+      <span id="challenge-timer" style="color:yellow;"></span>
+    `);
+
+    // Timer for challenge (optional, 60 seconds)
+    let challengeTime = 60;
+    const challengeTimerSpan = document.getElementById('challenge-timer');
+    challengeTimerSpan.textContent = `Time left: ${challengeTime} seconds`;
+    const challengeInterval = setInterval(() => {
+      challengeTime--;
+      challengeTimerSpan.textContent = `Time left: ${challengeTime} seconds`;
+      if (challengeTime <= 0) {
+        clearInterval(challengeInterval);
+        document.getElementById('result').innerHTML = '<span style="color:red">⏰ Time is up! Restarting game...</span>';
+        completed = resetCompleted();
+        lives = 3;
+        setTimeout(() => {
+          updateProgress();
+          resetMenu();
+        }, 3000);
+      }
+    }, 1000);
+
+    document.getElementById('submit-codes').onclick = function() {
+      const val1 = document.getElementById('input-code1').value.trim().toUpperCase();
+      const val2 = document.getElementById('input-code2').value.trim().toUpperCase();
+      const result = document.getElementById('result');
+      if (val1 === code1 && val2 === code2) {
+        clearInterval(challengeInterval);
+        result.innerHTML = '<span style="color:lime">✅ Correct! You may proceed.</span>';
+        show(exitButton, true);
+      } else {
+        result.innerHTML = '<span style="color:red">❌ One or both codes are incorrect. Try again.</span>';
+      }
+    };
+  }, 7000);
+}
+
 // Init
 renderLives();
 updateProgress();
-resetMenu();
+resetMenu()
