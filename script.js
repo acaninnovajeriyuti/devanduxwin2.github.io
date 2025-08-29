@@ -126,7 +126,7 @@ function quest1() {
 function quest2() {
   if (completed.quest2) return print("✔ Already solved.");
   currentQuestion = { key: "quest2" };
-  print("Who developed the first commercial car? (Hint: Ford?)");
+  print("Who developed the first commercial car? Hint: Henry ...");
   show(inputGroup, true);
 }
 
