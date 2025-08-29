@@ -217,7 +217,7 @@ function resetMenu() {
 }
 
 function exitGame() {
-  print("🚪 Farewell, traveler... The code is: 54243");
+  print("🚪 Farewell, traveler... The code is: 54243, Now a little challenge... you need to found 5 3D-Printed numbers and put it on the colored papers. Good Luck...");
 }
 
 // === Final Challenge ===
